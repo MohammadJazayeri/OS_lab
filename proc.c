@@ -459,7 +459,6 @@ scheduler(void)
       if((p->state != RUNNABLE) || (p->level_queue != 0))
         continue;
       int min_last_exec = find_min_last_exec();
-      // cprintf("pid %d cur %d vc. min %d\n", p->pid, p->last_exec, min_last_exec);
       if(p->last_exec == min_last_exec)
       {
         // Switch to chosen process.  It is the process's job
@@ -482,19 +481,19 @@ scheduler(void)
     // SJF
     for(int j = 0; j < NPROC; j++){
       int count = sort_pcbs_by_burst();
-      int seed = (ticks * 17) % 100;
+      int seed = (ticks * 19) % 100;
       if(count > 0){
-        cprintf("count is: %d and seed is %d\n", count, seed);
+        // cprintf("count is: %d and seed is %d\n", count, seed);
         struct proc *p = sorted_procs[count - 1];
         for (int i = 0; i < count; i++) {
-          cprintf("%d. certainty: %d\n", sorted_procs[i]->pid, sorted_procs[i]->certainty);
+          // cprintf("%d. certainty: %d\n", sorted_procs[i]->pid, sorted_procs[i]->certainty);
             if (sorted_procs[i]->certainty > seed) {
                 p = sorted_procs[i];
                 // Run the process with the shortest burst time
                 break;
             }
         }
-        cprintf("shortest is: %d with burst: %d and certainty: %d\n", p->pid, p->burst, p->certainty);
+        // cprintf("shortest is: %d with burst: %d and certainty: %d\n", p->pid, p->burst, p->certainty);
         c->proc = p;
         switchuvm(p);
         p->state = RUNNING;
