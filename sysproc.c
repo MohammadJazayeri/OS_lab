@@ -105,3 +105,12 @@ int sys_SJF_init(void){
     return -1;
   return SJF_init(pid, burst, certainty); 
 }
+
+void sys_change_queue(void){
+  int pid, dest_Q;
+  if(argint(0, &pid) < 0 || argint(1, &dest_Q) < 0 || argint(1, &dest_Q) > 2){
+    cprintf("Invalid arguments!\n");
+    return;
+  }
+  return change_queue(pid, dest_Q);
+}

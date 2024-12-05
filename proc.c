@@ -69,6 +69,23 @@ int SJF_init(int pid, int burst, int certainty){
   return 0;
 }
 
+void change_queue(int pid , int dest_Q){
+  struct proc* p;
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->pid == pid){
+      if(p->level_queue != dest_Q){
+        p->level_queue = dest_Q;
+      }
+      else{
+        cprintf("Process is already in queue %d!\n", dest_Q);
+      }
+      break;
+    }
+  }
+  release(&ptable.lock);
+}
+
 // Must be called with interrupts disabled
 int
 cpuid() {
@@ -481,7 +498,7 @@ scheduler(void)
     // SJF
     for(int j = 0; j < NPROC; j++){
       int count = sort_pcbs_by_burst();
-      int seed = (ticks * 19) % 100;
+      int seed = (ticks * 17) % 100;
       if(count > 0){
         // cprintf("count is: %d and seed is %d\n", count, seed);
         struct proc *p = sorted_procs[count - 1];

@@ -29,6 +29,7 @@ int get_most_invoked_syscall(int);
 int sort_syscalls(int);
 void list_all_processes(void);
 int SJF_init(int, int, int);
+void change_queue(int, int);
 
 // ulib.c
 int stat(const char*, struct stat*);

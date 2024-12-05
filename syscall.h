@@ -26,3 +26,4 @@
 #define SYS_sort_syscalls 25
 #define SYS_list_all_processes 26
 #define SYS_SJF_init 27
+#define SYS_change_queue 28
