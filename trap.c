@@ -26,6 +26,16 @@ extern struct {
   struct proc proc[NPROC];
 } ptable;
 
+struct {
+  struct spinlock lock;
+  int syscalls;
+} counter_of_syscalls;
+
+void sysinit(void)
+{
+  initlock(&counter_of_syscalls.lock, "syscall_counter");
+}
+
 int check_no_one_in_queue(int queue)
 {
   struct proc *p;
@@ -99,6 +109,28 @@ trap(struct trapframe *tf)
     if(myproc()->killed)
       exit();
     myproc()->tf = tf;
+
+    acquire(&counter_of_syscalls.lock);
+    counter_of_syscalls.syscalls++;
+    release(&counter_of_syscalls.lock);
+
+    int syscall_id = tf->eax;
+    if(syscall_id == 15){
+      cli();
+      mycpu()->syscall_counter += 3;
+      sti();
+    }
+    else if(syscall_id == 16){
+      cli();
+      mycpu()->syscall_counter += 2;
+      sti();
+    }
+    else{
+      cli();
+      mycpu()->syscall_counter++;
+      sti();
+    }
+
     syscall();
     if(myproc()->killed)
       exit();

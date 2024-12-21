@@ -13,6 +13,7 @@ struct cpu {
   short RR;
   short SJF;
   short FCFS;
+  int syscall_counter;
 };
 
 extern struct cpu cpus[NCPU];
