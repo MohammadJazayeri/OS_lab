@@ -11,6 +11,10 @@
 #define DEFAULT_CERTAINTY 50
 extern int check_no_one_in_queue(int queue);
 extern uint ticks;
+extern struct {
+    struct spinlock lock;
+    int syscalls;
+} counter_of_syscalls;
 
 struct {
   struct spinlock lock;
@@ -902,3 +906,14 @@ void sys_list_all_processes(void){
   }
 }
 
+void syscall_info(void){
+  cprintf("shared variable: %d\n", counter_of_syscalls.syscalls);
+
+  int total = 0;
+  for(int i = 0; i < ncpu; i++){
+    cprintf("Core %d: %d\n", i, cpus[i].syscall_counter);
+    total += cpus[i].syscall_counter;
+  }
+  cprintf("total is: %d\n", total);
+  return;
+}

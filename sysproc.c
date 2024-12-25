@@ -118,3 +118,7 @@ void sys_change_queue(void){
 void sys_print_info(void){
   return print_info();
 }
+
+void sys_syscall_info(void){
+  return syscall_info();
+}

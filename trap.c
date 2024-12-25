@@ -110,11 +110,20 @@ trap(struct trapframe *tf)
       exit();
     myproc()->tf = tf;
 
+    int syscall_id = tf->eax;
+
     acquire(&counter_of_syscalls.lock);
-    counter_of_syscalls.syscalls++;
+    if(syscall_id == 15){
+      counter_of_syscalls.syscalls += 3;
+    }
+    else if(syscall_id == 16){
+      counter_of_syscalls.syscalls += 2;
+    }
+    else{
+      counter_of_syscalls.syscalls++;
+    }
     release(&counter_of_syscalls.lock);
 
-    int syscall_id = tf->eax;
     if(syscall_id == 15){
       cli();
       mycpu()->syscall_counter += 3;

@@ -28,3 +28,4 @@
 #define SYS_SJF_init 27
 #define SYS_change_queue 28
 #define SYS_print_info 29
+#define SYS_syscall_info 30

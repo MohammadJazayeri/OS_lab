@@ -1,4 +1,4 @@
-#define SYSCALL_NUM 29
+#define SYSCALL_NUM 30
 
 // Per-CPU state
 struct cpu {

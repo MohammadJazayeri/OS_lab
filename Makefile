@@ -190,6 +190,7 @@ UPROGS=\
 	_test_list_all_processes\
 	_test_RR\
 	_user1\
+	_test_syscall_counter\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -259,7 +260,7 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
-	printf.c umalloc.c create_palindrome_testing.c test_move_file.c test_get_most_invoked.c test_sort_syscalls.c test_list_all_processes.c test_RR.c\
+	printf.c umalloc.c create_palindrome_testing.c test_move_file.c test_get_most_invoked.c test_sort_syscalls.c test_list_all_processes.c test_RR.c _test_syscall_counter.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 
