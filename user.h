@@ -31,7 +31,8 @@ void list_all_processes(void);
 int SJF_init(int, int, int);
 void change_queue(int, int);
 void print_info(void);
-void syscall_info(void);
+void test_lock(void);
+
 
 
 // ulib.c

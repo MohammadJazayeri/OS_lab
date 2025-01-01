@@ -119,6 +119,6 @@ void sys_print_info(void){
   return print_info();
 }
 
-void sys_syscall_info(void){
-  return syscall_info();
+void sys_test_lock(void){
+  test_lock();
 }

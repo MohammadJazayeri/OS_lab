@@ -6,6 +6,7 @@
 #include "proc.h"
 #include "x86.h"
 
+void init_reentrantlock_test(void);
 static void startothers(void);
 static void mpmain(void)  __attribute__((noreturn));
 extern pde_t *kpgdir;
@@ -31,6 +32,7 @@ main(void)
   sysinit();
   tvinit();        // trap vectors
   binit();         // buffer cache
+  init_reentrantlock_test(); // initial_reentrantllock_test
   fileinit();      // file table
   ideinit();       // disk 
   startothers();   // start other processors

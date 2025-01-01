@@ -111,7 +111,7 @@ extern int sys_list_all_processes(void);
 extern int sys_SJF_init(void);
 extern int sys_change_queue(void);
 extern int sys_print_info(void);
-extern int sys_syscall_info(void);
+extern int sys_test_lock(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -143,7 +143,7 @@ static int (*syscalls[])(void) = {
 [SYS_SJF_init] sys_SJF_init,
 [SYS_change_queue] sys_change_queue,
 [SYS_print_info] sys_print_info,
-[SYS_syscall_info] sys_syscall_info,
+[SYS_test_lock] sys_test_lock,
 };
 
 void

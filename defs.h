@@ -7,6 +7,7 @@ struct proc;
 struct rtcdate;
 struct spinlock;
 struct sleeplock;
+struct reentrantlock;
 struct stat;
 struct superblock;
 
@@ -139,6 +140,12 @@ void            releasesleep(struct sleeplock*);
 int             holdingsleep(struct sleeplock*);
 void            initsleeplock(struct sleeplock*, char*);
 
+//reentrantlock.c
+void initreentrantlock(struct reentrantlock *, char*);
+void acquirereentrantlock(struct reentrantlock*);
+void releasereentrantlock(struct reentrantlock*);
+void test_lock(void);
+
 // string.c
 int             memcmp(const void*, const void*, uint);
 void*           memmove(void*, const void*, uint);
@@ -162,7 +169,6 @@ void            list_all_processes(void);
 int             SJF_init(int, int, int);
 void            change_queue(int, int);
 void            print_info(void);
-void            syscall_info(void);
 
 // timer.c
 void            timerinit(void);

@@ -6,15 +6,12 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "reentrantlock.h"
 
 #define DEFAULT_BURST 2
 #define DEFAULT_CERTAINTY 50
 extern int check_no_one_in_queue(int queue);
 extern uint ticks;
-extern struct {
-    struct spinlock lock;
-    int syscalls;
-} counter_of_syscalls;
 
 struct {
   struct spinlock lock;
@@ -23,6 +20,7 @@ struct {
 
 static struct proc *initproc;
 struct proc *sorted_procs[NPROC];
+static struct reentrantlock testing_lock;
 int nextpid = 1;
 extern void forkret(void);
 extern void trapret(void);
@@ -339,7 +337,7 @@ fork(void)
   if((np = allocproc()) == 0){
     return -1;
   }
-
+  
   // Copy process state from proc.
   if((np->pgdir = copyuvm(curproc->pgdir, curproc->sz)) == 0){
     kfree(np->kstack);
@@ -906,14 +904,41 @@ void sys_list_all_processes(void){
   }
 }
 
-void syscall_info(void){
-  cprintf("shared variable: %d\n", counter_of_syscalls.syscalls);
+void recursive_lock_test(int depth) 
+{
+    if (depth == 0) 
+    {
+        return;
+    }
 
-  int total = 0;
-  for(int i = 0; i < ncpu; i++){
-    cprintf("Core %d: %d\n", i, cpus[i].syscall_counter);
-    total += cpus[i].syscall_counter;
-  }
-  cprintf("total is: %d\n", total);
-  return;
+    cprintf("Acquiring lock at depth %d pid %d\n", depth, myproc()->pid);
+    acquirereentrantlock(&testing_lock);
+
+    recursive_lock_test(depth - 1);
+
+    cprintf("Releasing lock at depth %d pid %d\n", depth, myproc()->pid);
+    releasereentrantlock(&testing_lock);
+}
+
+void test_lock() 
+{
+    cprintf("Testing reentrant lock...\n");
+
+    // // Non-recursive case
+    cprintf("Acquiring lock (non-recursive)...\n");
+    acquirereentrantlock(&testing_lock);
+    cprintf("Lock acquired. Releasing lock...\n");
+    releasereentrantlock(&testing_lock);
+    cprintf("Lock released.\n");
+
+    // Recursive case
+    cprintf("Starting recursive lock test...\n");
+    recursive_lock_test(3);
+    cprintf("Recursive lock test completed.\n");
+}
+
+void init_reentrantlock_test(void)
+{
+  cprintf("Initializing reentrant lock...\n");
+  initreentrantlock(&testing_lock, "test_lock");
 }

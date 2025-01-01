@@ -16,6 +16,7 @@ OBJS = \
 	pipe.o\
 	proc.o\
 	sleeplock.o\
+	reentrantlock.o\
 	spinlock.o\
 	string.o\
 	swtch.o\
@@ -190,7 +191,7 @@ UPROGS=\
 	_test_list_all_processes\
 	_test_RR\
 	_user1\
-	_test_syscall_counter\
+	_test_reentrantlock\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -227,7 +228,7 @@ QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; \
 	then echo "-gdb tcp::$(GDBPORT)"; \
 	else echo "-s -p $(GDBPORT)"; fi)
 ifndef CPUS
-CPUS := 4
+CPUS := 1
 endif
 QEMUOPTS = -drive file=fs.img,index=1,media=disk,format=raw -drive file=xv6.img,index=0,media=disk,format=raw -smp cpus=$(CPUS),cores=1,threads=1,sockets=$(CPUS) -m 512 $(QEMUEXTRA)
 
@@ -260,7 +261,7 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
-	printf.c umalloc.c create_palindrome_testing.c test_move_file.c test_get_most_invoked.c test_sort_syscalls.c test_list_all_processes.c test_RR.c _test_syscall_counter.c\
+	printf.c umalloc.c create_palindrome_testing.c test_move_file.c test_get_most_invoked.c test_sort_syscalls.c test_list_all_processes.c test_RR.c test_reentrantlock.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 
